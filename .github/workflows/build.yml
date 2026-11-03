@@ -13,7 +13,7 @@ jobs:
       - name: Build
         run: |
           mkdir -p web
-          SRC=$(ls source/src/*.cpp | grep -v -E '/(pch|win32)\.cpp$' || true)
+          SRC=$(ls source/src/*.cpp | grep -v -E '/(pch|win32|master)\.cpp$' || true)
           ENET=$(ls source/enet/*.c 2>/dev/null | grep -v win32 || true)
           em++ $SRC $ENET -O2 -std=gnu++11 -w \
             -Isource/src -Isource/enet/include \
