@@ -47,10 +47,8 @@
 #include <sys/poll.h>
 #endif
 
-#ifndef HAS_SOCKLEN_T
-#ifndef __EMSCRIPTEN__
+#if !defined(HAS_SOCKLEN_T) && !defined(__EMSCRIPTEN__)
 typedef int socklen_t;
-#endif
 #endif
 
 #ifndef MSG_NOSIGNAL
