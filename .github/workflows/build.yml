@@ -23,6 +23,7 @@ jobs:
             -sUSE_OGG=1 -sUSE_VORBIS=1 -sUSE_ZLIB=1 \
             -sLEGACY_GL_EMULATION=1 -sASYNCIFY \
             -sMIN_WEBGL_VERSION=1 -sMAX_WEBGL_VERSION=1 \
+            -sGL_UNSAFE_OPTS=0 -sGL_ASSERTIONS=1 \
             -sALLOW_MEMORY_GROWTH=1 -sINITIAL_MEMORY=256MB \
             -sFORCE_FILESYSTEM=1 \
             -Wl,--error-limit=0 \
