@@ -600,6 +600,11 @@ void setupscreen(int &useddepthbits, int &usedfsaa)
         0 /* try disabling everything */
     };
     int config = 0;
+#ifdef __EMSCRIPTEN__
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_ES);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
+#else
     SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 0);
     if(!depthbits) SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 16);
     if(!fsaa)
@@ -607,25 +612,27 @@ void setupscreen(int &useddepthbits, int &usedfsaa)
         SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 0);
         SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 0);
     }
+#endif
     loopi(sizeof(configs)/sizeof(configs[0]))
     {
         config = configs[i];
         if(!depthbits && config&1) continue;
         if(!stencilbits && config&2) continue;
         if(fsaa<=0 && config&4) continue;
+#ifndef __EMSCRIPTEN__
         if(depthbits) SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, config&1 ? depthbits : 16);
-        if(stencilbits)
-        {
-            SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, config&2 ? stencilbits : 0);
-            hasstencil = (config&2)!=0;
-        }
-        else hasstencil = false;
+        if(stencilbits) SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, config&2 ? stencilbits : 0);
         if(fsaa>0)
         {
             SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, config&4 ? 1 : 0);
             SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, config&4 ? fsaa : 0);
         }
+#endif
+        if(stencilbits) hasstencil = (config&2)!=0;
+        else hasstencil = false;
+#ifndef __EMSCRIPTEN__
         SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+#endif
         screen = SDL_CreateWindow("AssaultCube",
             SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
             winw, winh,
