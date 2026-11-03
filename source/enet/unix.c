@@ -48,7 +48,9 @@
 #endif
 
 #ifndef HAS_SOCKLEN_T
+#ifndef __EMSCRIPTEN__
 typedef int socklen_t;
+#endif
 #endif
 
 #ifndef MSG_NOSIGNAL
