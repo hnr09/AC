@@ -11,14 +11,16 @@
 </head>
 <body>
 <div id="status">로딩 중...</div>
-<canvas id="canvas" oncontextmenu="event.preventDefault()" tabindex="-1"></canvas>
+<canvas id="canvas" width="1024" height="768" oncontextmenu="event.preventDefault()" tabindex="-1"></canvas>
 <script>
+  var canvasEl = document.getElementById('canvas');
   var Module = {
-    canvas: document.getElementById('canvas'),
-    setStatus: t => document.getElementById('status').textContent = t || '클릭하면 마우스 잠금 (ESC로 해제)',
+    canvas: canvasEl,
+    arguments: ['-t0', '-w1024', '-h768'],
+    setStatus: function(t) { document.getElementById('status').textContent = t || '클릭하면 마우스 잠금 (ESC로 해제)'; },
     print: console.log, printErr: console.error
   };
-  canvas.addEventListener('click', () => canvas.requestPointerLock());
+  canvasEl.addEventListener('click', function() { canvasEl.requestPointerLock(); });
 </script>
 {{{ SCRIPT }}}
 </body>
