@@ -23,7 +23,7 @@ jobs:
             -sLEGACY_GL_EMULATION=1 -sASYNCIFY \
             -sALLOW_MEMORY_GROWTH=1 -sINITIAL_MEMORY=256MB \
             -sFORCE_FILESYSTEM=1 \
-            -sERROR_LIMIT=0 \
+            -Wl,--error-limit=0 \
             --preload-file config@/config \
             --preload-file packages@/packages \
             --preload-file bot@/bot \
