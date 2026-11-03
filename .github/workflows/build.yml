@@ -1,0 +1,42 @@
+name: build-web
+on: [workflow_dispatch, push]
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: mymindstorm/setup-emsdk@v14
+      - name: Build
+        run: |
+          mkdir -p web
+          SRC=$(ls source/src/*.cpp | grep -v -E 'server\.cpp|master|demo2|crypto' || true)
+          ENET=$(ls source/enet/*.c 2>/dev/null || true)
+          em++ $SRC $ENET -O2 -std=gnu++11 -w \
+            -Isource/src -Isource/enet/include \
+            -DHAVE_CONFIG_H -D__EMSCRIPTEN__ \
+            -sUSE_SDL=2 -sUSE_SDL_IMAGE=2 -sSDL2_IMAGE_FORMATS='["png","jpg"]' \
+            -sUSE_OGG=1 -sUSE_VORBIS=1 -sUSE_ZLIB=1 \
+            -sLEGACY_GL_EMULATION=1 -sASYNCIFY \
+            -sALLOW_MEMORY_GROWTH=1 -sINITIAL_MEMORY=256MB \
+            -sFORCE_FILESYSTEM=1 \
+            --preload-file config@/config \
+            --preload-file packages@/packages \
+            --preload-file bot@/bot \
+            --shell-file shell.html \
+            -o web/index.html
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: web
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.d.outputs.page_url }}
+    steps:
+      - id: d
+        uses: actions/deploy-pages@v4
