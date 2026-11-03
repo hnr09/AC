@@ -13,8 +13,8 @@ jobs:
       - name: Build
         run: |
           mkdir -p web
-          SRC=$(ls source/src/*.cpp | grep -v -E 'server\.cpp|master|demo2|crypto' || true)
-          ENET=$(ls source/enet/*.c 2>/dev/null || true)
+          SRC=$(ls source/src/*.cpp | grep -v -E '/(pch|win32)\.cpp$' || true)
+          ENET=$(ls source/enet/*.c 2>/dev/null | grep -v win32 || true)
           em++ $SRC $ENET -O2 -std=gnu++11 -w \
             -Isource/src -Isource/enet/include \
             -DHAVE_CONFIG_H -D__EMSCRIPTEN__ \
