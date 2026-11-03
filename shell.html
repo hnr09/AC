@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>AssaultCube Web</title>
+<style>
+  body { margin:0; background:#111; color:#eee; font-family:sans-serif; text-align:center; }
+  canvas { width:100vw; height:calc(100vh - 40px); display:block; background:#000; }
+  #status { height:40px; line-height:40px; }
+</style>
+</head>
+<body>
+<div id="status">로딩 중...</div>
+<canvas id="canvas" oncontextmenu="event.preventDefault()" tabindex="-1"></canvas>
+<script>
+  var Module = {
+    canvas: document.getElementById('canvas'),
+    setStatus: t => document.getElementById('status').textContent = t || '클릭하면 마우스 잠금 (ESC로 해제)',
+    print: console.log, printErr: console.error
+  };
+  canvas.addEventListener('click', () => canvas.requestPointerLock());
+</script>
+{{{ SCRIPT }}}
+</body>
+</html>
