@@ -630,12 +630,15 @@ void setupscreen(int &useddepthbits, int &usedfsaa)
             SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
             winw, winh,
             SDL_WINDOW_OPENGL | flags);
-        if(screen)
+                if(screen)
         {
             glcontext = SDL_GL_CreateContext(screen);
             if(glcontext) break;
+            printf("GLCTX FAIL config %d: %s\n", config, SDL_GetError());
             SDL_DestroyWindow(screen);
+            screen = NULL;
         }
+        else printf("WINDOW FAIL: %s\n", SDL_GetError());
     }
     if(!screen) fatal("Unable to create OpenGL screen");
     else
