@@ -1,18 +1,31 @@
 #ifdef __EMSCRIPTEN__
+#ifndef GLCOMPAT_H
+#define GLCOMPAT_H
 #include <SDL_opengl.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
-// glVertex2d -> float 버전으로 대체
-static inline void glVertex2d(double x, double y) { glVertex2f((float)x, (float)y); }
-// 디스플레이 리스트: 모델 렌더용. 일단 no-op 스텁 (모델이 안 보일 수 있음)
-static inline GLuint glGenLists(GLsizei n) { static GLuint c = 1; GLuint r = c; c += n; return r; }
-static inline void glNewList(GLuint l, GLenum m) {}
-static inline void glEndList(void) {}
-static inline void glCallList(GLuint l) {}
-static inline void glDeleteLists(GLuint l, GLsizei r) {}
-static inline void glGetTexImage(GLenum t, GLint l, GLenum f, GLenum ty, void* p) {}
+
+static inline void ac_glVertex2d(double x, double y) { glVertex2f((float)x, (float)y); }
+static inline GLuint ac_glGenLists(GLsizei n) { static GLuint c = 1; GLuint r = c; c += n; return r; }
+static inline void ac_glNewList(GLuint l, GLenum m) { (void)l; (void)m; }
+static inline void ac_glEndList(void) {}
+static inline void ac_glCallList(GLuint l) { (void)l; }
+static inline void ac_glDeleteLists(GLuint l, GLsizei r) { (void)l; (void)r; }
+static inline void ac_glGetTexImage(GLenum t, GLint l, GLenum f, GLenum ty, void* p) { (void)t; (void)l; (void)f; (void)ty; (void)p; }
+
 #ifdef __cplusplus
 }
+#endif
+
+#define glVertex2d ac_glVertex2d
+#define glGenLists ac_glGenLists
+#define glNewList ac_glNewList
+#define glEndList ac_glEndList
+#define glCallList ac_glCallList
+#define glDeleteLists ac_glDeleteLists
+#define glGetTexImage ac_glGetTexImage
+
 #endif
 #endif
