@@ -17,6 +17,7 @@ jobs:
           ENET=$(ls source/enet/*.c 2>/dev/null | grep -v win32 || true)
           em++ $SRC $ENET -O2 -std=gnu++11 -w \
             -Isource/src -Isource/enet/include \
+            -include source/src/glcompat.h \
             -DHAVE_CONFIG_H -D__EMSCRIPTEN__ \
             -sUSE_SDL=2 -sUSE_SDL_IMAGE=2 -sSDL2_IMAGE_FORMATS='["png","jpg"]' \
             -sUSE_OGG=1 -sUSE_VORBIS=1 -sUSE_ZLIB=1 \
